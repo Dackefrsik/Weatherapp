@@ -53,7 +53,7 @@ function weather(lat, lon){
     })
     .then((data) => {
         console.log(data);
-        fetch("http://api.timezonedb.com/v2.1/get-time-zone?key=W2KV6C9E7TW4&format=json&by=position&lat=" +lat+ "&lng=" +lon)
+        fetch("http://api.timezonedb.com/v2.1/get-time-zone?key=W2KV6C9E7TW4&format=json&by=position&lat=" + lat + "&lng="  + lon)
         .catch((error) => {
             console.log(error);
         })
