@@ -4,6 +4,32 @@ window.addEventListener("load", () => {
     console.log("load");
     setInterval(updateClock, 1000);
 
+    let h1Ref= document.querySelector("#h1");
+    let divRef = document.querySelector("#show-weather");
+    let hourRef = document.querySelector("#show-next-hour");
+
+    document.querySelector(".compass").addEventListener("click", () => {
+        console.log("On click");
+    
+        if(h1Ref.innerHTML != null){
+            h1Ref.innerHTML = null;
+            divRef.innerHTML = null;
+            hourRef.innerHTML = null;
+        }
+        if("geolocation" in navigator){
+            navigator.geolocation.getCurrentPosition((position) => {
+                let lat = position.coords.latitude;
+                let lon = position.coords.longitude;
+    
+                weather(lat, lon);
+            });
+        }
+        else{
+            console.log("No GPs function in webb browser!");
+        }
+    });       
+   
+
     document.querySelector("form").addEventListener("submit", (event) => {
         event.preventDefault();
         console.log("submit");
@@ -19,9 +45,7 @@ window.addEventListener("load", () => {
            return response.json();
         })
         .then((data) => {
-            let h1Ref= document.querySelector("#h1");
-            let divRef = document.querySelector("#show-weather");
-            let hourRef = document.querySelector("#show-next-hour");
+            
             if(h1Ref.innerHTML != null){
                 h1Ref.innerHTML = null;
                 divRef.innerHTML = null;
@@ -62,6 +86,14 @@ function weather(lat, lon){
         })
         .then((data2) =>{
            console.log(data2);
+
+           let h1Ref = document.querySelector("#h1");
+           console.log(h1Ref.innerHTML);
+           if(h1Ref.innerHTML === ""){
+            console.log("null");
+            let textNodeRef = document.createTextNode(data2.cityName);
+            h1Ref.appendChild(textNodeRef);
+           }
 
             let divRef = document.querySelector("#show-weather");
             let imgRef = document.createElement("img");
