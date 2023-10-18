@@ -10,6 +10,9 @@ window.addEventListener("load", () => {
 
     document.querySelector(".compass").addEventListener("click", () => {
         console.log("On click");
+
+        let iframeRef = document.querySelector("iframe");
+        iframeRef.style.display = "none";
     
         if(h1Ref.innerHTML != null){
             h1Ref.innerHTML = null;
@@ -31,6 +34,8 @@ window.addEventListener("load", () => {
    
 
     document.querySelector("form").addEventListener("submit", (event) => {
+        let iframeRef = document.querySelector("iframe");
+        iframeRef.style.display = "none";
         event.preventDefault();
         console.log("submit");
 
@@ -65,6 +70,19 @@ window.addEventListener("load", () => {
             weather(lat, lon);
         })  
     });
+
+    document.querySelector("input[type='button']").addEventListener("click", () =>{
+        
+        if(h1Ref.innerHTML != null){
+            h1Ref.innerHTML = null;
+            divRef.innerHTML = null;
+            hourRef.innerHTML = null;
+        }
+
+        let iframeRef = document.querySelector("iframe");
+        iframeRef.style.display = "block";
+    })
+
 });
 
 function weather(lat, lon){
