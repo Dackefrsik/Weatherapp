@@ -3,29 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="public/style/style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">    <link rel="stylesheet" href="../style/style.css">
     <title>Weather</title>
 </head>
 <body>
-    <div id="clock">
-    </div>
-    <div>
-        <form action="">
-            <input type="button" value="Map">
-            <input type="search" name="search">
-            <input type="submit" value="search">
-            <img src="public/image/compass-icon.png" class="compass">
-        </form>
-    </div>
-    <h1 id="h1"></h1>
-    <div id="container">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d32459.57605182724!2d13.4448174!3d59.437685900000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ssv!2sse!4v1697644762467!5m2!1ssv!2sse" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="map"></iframe>
-        <div id="show-weather">
+    <!--#region Header-->
+    <header class="container-fluid d-flex justify-content-center bg-light w-100">
+        <div id="clock">
+        </div> 
+    </header>
+    <!--#endregion-->
+
+    <!--#region navbar-->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid d-flex justify-content-end">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                    <div class="btn btn-primary" id="map">Map</div>
+                    </li>
+                    <li class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-compass compass mx-3 mt-2" viewBox="0 0 16 16">
+                        <path d="M8 16.016a7.5 7.5 0 0 0 1.962-14.74A1 1 0 0 0 9 0H7a1 1 0 0 0-.962 1.276A7.5 7.5 0 0 0 8 16.016m6.5-7.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0"/>
+                        <path d="m6.94 7.44 4.95-2.83-2.83 4.95-4.949 2.83 2.828-4.95z"/>
+                        </svg>
+                    </li>
+                </ul>
+                
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
         </div>
-        <div id="show-next-hour">
+    </nav>
+    <!--#endreagon-->
+
+    <!--#region Innehåll i main-->
+      <main>
+        <h1 id="h1" class="d-flex justify-content-center"></h1>
+        <div id="container">
+            <div class="row">
+                <div class="d-flex justify-content-center">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d32459.57605182724!2d13.4448174!3d59.437685900000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ssv!2sse!4v1697644762467!5m2!1ssv!2sse" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="map d-none mt-3"></iframe>
+                    
+                    <div id="show-weather">
+                    </div>
+                    <div class="d-flex flex-column justify-content-center align-items-center">
+                        <div id="show-next-hour">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <script src="public/js/client-script.js"></script>
+    </main>
+    <!--#endregion-->
+
+    <!--#region footer-->
+    <footer class="py-3 fixed-bottom bg-light">
+        <p class="text-center text-body-secondary">© 2024 Weather, Inc</p>
+    </footer>
+    <!--#endregion-->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>    <script src="../js/client-script.js"></script>
+    <script src="../js/client-script.js"></script>
 </body>
 </html>

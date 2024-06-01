@@ -2,8 +2,23 @@
 
 window.addEventListener("load", () => {
     console.log("load");
+
+    //#region Hömtar ut knappen för att kunna visa kartan
+    let mapBtnRef = document.querySelector("#map");
+
+    //Lyssnare som kollar om användaren klickar på knappen för kartan 
+    mapBtnRef.addEventListener("click", () => {
+
+        //Hämtar ut kartan och skiftar av och på med klassen 
+        let iframeRef = document.querySelector(".map");
+        iframeRef.classList.toggle("d-none");
+    });
+    //#endregion
+
+    //sätter igång klockan
     setInterval(updateClock, 1000);
 
+    //#region räknar ut kordinaterna som visar väder
     let h1Ref= document.querySelector("#h1");
     let divRef = document.querySelector("#show-weather");
     let hourRef = document.querySelector("#show-next-hour");
@@ -81,10 +96,15 @@ window.addEventListener("load", () => {
 
         let iframeRef = document.querySelector("iframe");
         iframeRef.style.display = "block";
+        iframeRef.addEventListener("click", () => {
+            console.log("Value: " + iframeRef.value);
+        });
     })
+    //#endregion
 
 });
 
+//#region funktion som visar väder
 function weather(lat, lon){
     fetch("https://api.open-meteo.com/v1/forecast?latitude="+ lat +"&longitude="+ lon +"&hourly=temperature_2m")
     .catch((error) => {
@@ -115,18 +135,20 @@ function weather(lat, lon){
 
             let divRef = document.querySelector("#show-weather");
             let imgRef = document.createElement("img");
-            imgRef.setAttribute("src", "/public/image/sun.png");
+            imgRef.setAttribute("src", "../image/sun.png");
             let weatherRef = document.createElement("h3");
+            weatherRef.classList.add("d-flex", "justify-content-center");
             let textNodeRef = document.createTextNode(data2.formatted.substring(11,16) + " " + data.hourly.temperature_2m[data2.formatted.substring(11,13)] + " " + data.hourly_units.temperature_2m);
             weatherRef.appendChild(textNodeRef);
             divRef.appendChild(imgRef);
             divRef.appendChild(weatherRef);
+            let hourRef = document.querySelector("#show-next-hour");
             for(let i = parseInt(data2.formatted.substring(11,13)) + 1; i < parseInt(data2.formatted.substring(11,13))  + 5; i++ ){
                 let time = i;
                 if(time >= 24){
                     time = time -24;
                 }
-                let hourRef = document.querySelector("#show-next-hour");
+                
                 let h3Ref = document.createElement("h3");
                 let textNodeRef2 = document.createTextNode(time + ":00 " + data.hourly.temperature_2m[i] + " " + data.hourly_units.temperature_2m);
                 h3Ref.appendChild(textNodeRef2);
@@ -135,7 +157,9 @@ function weather(lat, lon){
         });        
     })
 }
+//#endregion
 
+//#region funktion som styr klockan
 function updateClock(){
     let headRef = document.querySelector("#clock");
 
@@ -155,3 +179,4 @@ function updateClock(){
     timeRef.appendChild(textNodeRef);
     headRef.appendChild(timeRef);
 }
+//#endregion
