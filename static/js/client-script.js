@@ -1,5 +1,7 @@
 "use strict";
 
+//const { response } = require("express");
+
 window.addEventListener("load", () => {
     console.log("load");
 
@@ -86,7 +88,7 @@ window.addEventListener("load", () => {
         })  
     });
 
-    document.querySelector("input[type='button']").addEventListener("click", () =>{
+    document.querySelector(".btn").addEventListener("click", () =>{
         
         if(h1Ref.innerHTML != null){
             h1Ref.innerHTML = null;
@@ -135,7 +137,32 @@ function weather(lat, lon){
 
             let divRef = document.querySelector("#show-weather");
             let imgRef = document.createElement("img");
-            imgRef.setAttribute("src", "../image/sun.png");
+            fetch("https://api.openweathermap.org/data/2.5/weather?lat="+ lat +"&lon=" + lon + "&appid=5b4794c0213f8621d31acea89a4f7cdf")
+            .catch((error) => {
+                console.log(error);
+            })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data3) => {
+                console.log(data3);
+                if(data3.weather[0].main == "Clouds"){
+                    imgRef.setAttribute("src", "../image/clouds.png");
+                }
+                else if(data3.weather[0].main == "Clear"){
+                    imgRef.setAttribute("src", "../image/clear.png")
+                }
+                else if(data3.weather[0].main == "Rain"){
+                    imgRef.setAttribute("src", "../image/rain.png")
+                }
+                else if(data3.weather[0].main == "Drizzle"){
+                    imgRef.setAttribute("src", "../image/drizzle.png")
+                }
+                else if(data3.weather[0].main == "Mist" || data3.weather[0].main == "Haze"){
+                    imgRef.setAttribute("src", "../image/mist.png")
+                }
+            })
+
             let weatherRef = document.createElement("h3");
             weatherRef.classList.add("d-flex", "justify-content-center");
             let textNodeRef = document.createTextNode(data2.formatted.substring(11,16) + " " + data.hourly.temperature_2m[data2.formatted.substring(11,13)] + " " + data.hourly_units.temperature_2m);
