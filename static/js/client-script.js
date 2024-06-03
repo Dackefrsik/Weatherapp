@@ -12,7 +12,7 @@ window.addEventListener("load", () => {
     mapBtnRef.addEventListener("click", () => {
 
         //Hämtar ut kartan och skiftar av och på med klassen 
-        let iframeRef = document.querySelector(".map");
+        let iframeRef = document.querySelector(".iframemap");
         iframeRef.classList.toggle("d-none");
     });
     //#endregion
@@ -117,7 +117,7 @@ function weather(lat, lon){
     })
     .then((data) => {
         console.log(data);
-        fetch("http://api.timezonedb.com/v2.1/get-time-zone?key=W2KV6C9E7TW4&format=json&by=position&lat=" + lat + "&lng="  + lon)
+         fetch("http://api.timezonedb.com/v2.1/get-time-zone?key=W2KV6C9E7TW4&format=json&by=position&lat=" + lat + "&lng="  + lon)
         .catch((error) => {
             console.log(error);
         })
@@ -127,16 +127,8 @@ function weather(lat, lon){
         .then((data2) =>{
            console.log(data2);
 
-           let h1Ref = document.querySelector("#h1");
-           console.log(h1Ref.innerHTML);
-           if(h1Ref.innerHTML === ""){
-            console.log("null");
-            let textNodeRef = document.createTextNode(data2.cityName);
-            h1Ref.appendChild(textNodeRef);
-           }
+           let divRef = document.querySelector("#show-weather");
 
-            let divRef = document.querySelector("#show-weather");
-            let imgRef = document.createElement("img");
             fetch("https://api.openweathermap.org/data/2.5/weather?lat="+ lat +"&lon=" + lon + "&appid=5b4794c0213f8621d31acea89a4f7cdf")
             .catch((error) => {
                 console.log(error);
@@ -145,45 +137,16 @@ function weather(lat, lon){
                 return response.json();
             })
             .then((data3) => {
-                console.log(data3);
-                if(data3.weather[0].main == "Clouds"){
-                    imgRef.setAttribute("src", "../image/clouds.png");
-                }
-                else if(data3.weather[0].main == "Clear"){
-                    imgRef.setAttribute("src", "../image/clear.png")
-                }
-                else if(data3.weather[0].main == "Rain"){
-                    imgRef.setAttribute("src", "../image/rain.png")
-                }
-                else if(data3.weather[0].main == "Drizzle"){
-                    imgRef.setAttribute("src", "../image/drizzle.png")
-                }
-                else if(data3.weather[0].main == "Mist" || data3.weather[0].main == "Haze"){
-                    imgRef.setAttribute("src", "../image/mist.png")
-                }
+                showData(data3);
+                showHeat(data, data2, data3)
             })
 
-            let weatherRef = document.createElement("h3");
-            weatherRef.classList.add("d-flex", "justify-content-center");
-            let textNodeRef = document.createTextNode(data2.formatted.substring(11,16) + " " + data.hourly.temperature_2m[data2.formatted.substring(11,13)] + " " + data.hourly_units.temperature_2m);
-            weatherRef.appendChild(textNodeRef);
-            divRef.appendChild(imgRef);
-            divRef.appendChild(weatherRef);
-            let hourRef = document.querySelector("#show-next-hour");
-            for(let i = parseInt(data2.formatted.substring(11,13)) + 1; i < parseInt(data2.formatted.substring(11,13))  + 5; i++ ){
-                let time = i;
-                if(time >= 24){
-                    time = time -24;
-                }
-                
-                let h3Ref = document.createElement("h3");
-                let textNodeRef2 = document.createTextNode(time + ":00 " + data.hourly.temperature_2m[i] + " " + data.hourly_units.temperature_2m);
-                h3Ref.appendChild(textNodeRef2);
-                hourRef.appendChild(h3Ref);
-            }
-        });        
-    })
-}
+            
+            
+            
+        }); 
+    }) 
+} 
 //#endregion
 
 //#region funktion som styr klockan
@@ -206,4 +169,102 @@ function updateClock(){
     timeRef.appendChild(textNodeRef);
     headRef.appendChild(timeRef);
 }
+//#endregion
+
+//#region Med funktion som visar data
+function showData(data3){
+    
+    let h1Ref = document.querySelector("#h1");
+    h1Ref.classList.add("py-5");
+    console.log(h1Ref.innerHTML);
+    if(h1Ref.innerHTML === ""){
+    let textNodeRef = document.createTextNode(data3.name);
+    h1Ref.appendChild(textNodeRef);
+    }
+    console.log(data3);
+    
+    let conditionRef = document.querySelector("#condition");
+    conditionRef.innerHTML = "";
+
+    conditionRef.classList.add("d-flex", "justify-content-evenly", "mt-5");
+    let divRef = document.createElement("div");
+    divRef.classList.add("d-flex", "flex-row");
+    let imgRef2 = document.createElement("img");
+    imgRef2.setAttribute("src", "../image/wind.png");
+    imgRef2.classList.add("conditionIcon");
+    let textDiv = document.createElement("div");
+    textDiv.classList.add("d-flex", "flex-column", "px-3");
+    let h4Ref = document.createElement("h4");
+    h4Ref.innerHTML = data3.wind.speed + "km/h";
+    let h6Ref = document.createElement("h6");
+    h6Ref.innerHTML = "Wind Speed";
+    textDiv.appendChild(h4Ref);
+    textDiv.appendChild(h6Ref);
+    divRef.appendChild(textDiv);
+    divRef.appendChild(imgRef2);
+
+
+    let divRef2 = document.createElement("div");
+    divRef2.classList.add("d-flex", "flex-row");
+    let imgRef3 = document.createElement("img");
+    imgRef3.setAttribute("src", "../image/humidity.png");
+    imgRef3.classList.add("conditionIcon");
+    divRef2.appendChild(imgRef3);
+    let textDiv2 = document.createElement("div");
+    textDiv2.classList.add("d-flex", "flex-column"); 
+    let h4Ref2 = document.createElement("h4");
+    h4Ref2.innerHTML = data3.main.humidity + "%";
+    let h6Ref2 = document.createElement("h6");
+    h6Ref2.innerHTML = "Humidity";
+    h4Ref2.classList.add("px -3");
+    textDiv2.appendChild(h4Ref2);
+    textDiv2.appendChild(h6Ref2);
+    divRef2.appendChild(textDiv2);
+    divRef2.appendChild(imgRef3);
+
+    conditionRef.appendChild(divRef);    
+    conditionRef.appendChild(divRef2); 
+}
+//#endregion
+
+//#region Funktion som visar bild med med tid och gradantal
+function showHeat(data, data2, data3){
+    let divRef = document.querySelector("#show-weather");
+    let imgRef = document.createElement("img");
+    if(data3.weather[0].main == "Clouds"){
+        imgRef.setAttribute("src", "../image/clouds.png");
+    }
+    else if(data3.weather[0].main == "Clear"){
+        imgRef.setAttribute("src", "../image/clear.png")
+    }
+    else if(data3.weather[0].main == "Rain"){
+        imgRef.setAttribute("src", "../image/rain.png")
+    }
+    else if(data3.weather[0].main == "Drizzle"){
+        imgRef.setAttribute("src", "../image/drizzle.png")
+    }
+    else if(data3.weather[0].main == "Mist" || data3.weather[0].main == "Haze"){
+        imgRef.setAttribute("src", "../image/mist.png")
+    }
+
+    let weatherRef = document.createElement("h3");
+    weatherRef.classList.add("d-flex", "justify-content-center");
+    weatherRef.innerHTML = data2.formatted.substring(11,16) + " " + data.hourly.temperature_2m[data2.formatted.substring(11,13)] + " " + data.hourly_units.temperature_2m; //Orsakar en vertikal scrollbar
+            
+    divRef.appendChild(imgRef);
+    divRef.appendChild(weatherRef);
+    let hourRef = document.querySelector("#show-next-hour");
+    for(let i = parseInt(data2.formatted.substring(11,13)) + 1; i < parseInt(data2.formatted.substring(11,13))  + 5; i++ ){
+        let time = i;
+        if(time >= 24){
+            time = time -24;
+        }
+        
+        let h3Ref = document.createElement("h3");
+        let textNodeRef2 = document.createTextNode(time + ":00 " + data.hourly.temperature_2m[i] + " " + data.hourly_units.temperature_2m);
+        h3Ref.appendChild(textNodeRef2);
+        hourRef.appendChild(h3Ref);
+    }
+}
+
 //#endregion
