@@ -8,3 +8,84 @@
     width: 50px;
     height: 50px;
 }
+
+/* Navbar-toggler style */
+
+.navbar-toggler{
+    width: 20px;
+    height: 20px;
+    position: relative;
+    margin-left: auto;
+    transition: .5% ease-in-out;
+}
+
+.navbar-toggler,
+.navbar-toggler:focus,
+.navbar-toggler:active,
+.navbar-toggler-icon:focus{
+    outline: none;
+    box-shadow: none;
+    border: 0;
+}
+
+.navbar-toggler span{
+   padding: 0px;
+   margin: 0px;
+}
+
+.toggler-icon{
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    border-radius: 1px;
+    opacity: 1;
+    left: 0;
+    transform: rotate(0deg);
+    transition: .25s ease-in-out;
+}
+
+.middle-bar{
+    margin-top: 0px;
+}
+
+/* Styled animation (rotation) */
+.navbar-toggler .top-bar{
+    margin-top: 0px;
+    transform: rotate(135deg);
+    background: red;
+    opacity: .5;
+}
+
+.navbar-toggler .middle-bar{
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+
+.navbar-toggler .bottom-bar{
+    margin-top: 0px;
+    transform: rotate(-135deg);
+    background: red;
+    opacity: .5;
+}
+
+/* Utgångsläget, ingen rotation */
+
+.navbar-toggler.collapsed .top-bar{
+    margin-top: -10px;
+    transform: rotate(0deg);
+    background: grey;
+    opacity: 1;
+}
+
+.navbar-toggler.collapsed .middle-bar{
+    opacity: 1;
+    background: grey;
+}
+
+.navbar-toggler.collapsed .bottom-bar{
+    margin-top: 10px;
+    transform:  rotate(0deg);
+    background: grey;
+    opacity: 1;
+}
