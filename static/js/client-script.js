@@ -3,7 +3,6 @@
 //const { response } = require("express");
 
 window.addEventListener("load", () => {
-    console.log("load");
 
     //#region Hömtar ut knappen för att kunna visa kartan
     let mapBtnRef = document.querySelector("#map");
@@ -26,7 +25,6 @@ window.addEventListener("load", () => {
     let hourRef = document.querySelector("#show-next-hour");
 
     document.querySelector(".compass").addEventListener("click", () => {
-        console.log("On click");
 
         let iframeRef = document.querySelector("iframe");
         iframeRef.style.display = "none";
@@ -47,18 +45,17 @@ window.addEventListener("load", () => {
         else{
             console.log("No GPs function in webb browser!");
         }
-    });       
+    }); 
    
 
     document.querySelector("form").addEventListener("submit", (event) => {
         let iframeRef = document.querySelector("iframe");
         iframeRef.style.display = "none";
         event.preventDefault();
-        console.log("submit");
 
         let query = document.querySelector("input[type='search']").value;
-        console.log(query);
-
+        let navbarToggler = document.querySelector(".show");
+        navbarToggler.classList.remove("show");
         fetch("https://nominatim.openstreetmap.org/search?format=json&limit=3&q="  + query)
         .catch((error) => {
             console.log(error);
@@ -67,7 +64,7 @@ window.addEventListener("load", () => {
            return response.json();
         })
         .then((data) => {
-            
+            console.log(data);
             if(h1Ref.innerHTML != null){
                 h1Ref.innerHTML = null;
                 divRef.innerHTML = null;
@@ -79,13 +76,14 @@ window.addEventListener("load", () => {
 
             h1Ref.appendChild(textNodeRef);
             document.querySelector("input[type='search']").value = "";
-            console.log(data);
             let lat = data[0].lat;
             let lon = data[0].lon;
-            console.log(lat);
-            console.log(lon);
             weather(lat, lon);
-        })  
+
+            
+        }) 
+        
+        
     });
 
     document.querySelector(".btn").addEventListener("click", () =>{
@@ -127,7 +125,7 @@ function weather(lat, lon){
         .then((data2) =>{
            console.log(data2);
 
-           let divRef = document.querySelector("#show-weather");
+           //let divRef = document.querySelector("#show-weather");
 
             fetch("https://api.openweathermap.org/data/2.5/weather?lat="+ lat +"&lon=" + lon + "&appid=5b4794c0213f8621d31acea89a4f7cdf")
             .catch((error) => {
@@ -137,13 +135,10 @@ function weather(lat, lon){
                 return response.json();
             })
             .then((data3) => {
+                console.log(data3);
                 showData(data3);
-                showHeat(data, data2, data3)
+                showHeat(data, data2, data3);
             })
-
-            
-            
-            
         }); 
     }) 
 } 
@@ -163,7 +158,8 @@ function updateClock(){
     currentHour = (currentHour < 10 ? "0" : "") + currentHour;
     currentMin = (currentMin < 10 ? "0" : "") + currentMin;
 
-    let timeRef = document.createElement("h1");
+    let timeRef = document.createElement("h4");
+    timeRef.classList.add("mt-1")
     let textNodeRef = document.createTextNode(currentHour + ":" + currentMin);
 
     timeRef.appendChild(textNodeRef);
@@ -175,13 +171,11 @@ function updateClock(){
 function showData(data3){
     
     let h1Ref = document.querySelector("#h1");
-    h1Ref.classList.add("py-5");
-    console.log(h1Ref.innerHTML);
+    h1Ref.classList.add("mt-3");
     if(h1Ref.innerHTML === ""){
     let textNodeRef = document.createTextNode(data3.name);
     h1Ref.appendChild(textNodeRef);
     }
-    console.log(data3);
     
     let conditionRef = document.querySelector("#condition");
     conditionRef.innerHTML = "";
@@ -205,7 +199,7 @@ function showData(data3){
 
 
     let divRef2 = document.createElement("div");
-    divRef2.classList.add("d-flex", "flex-row");
+    divRef2.classList.add("d-flex", "flex");
     let imgRef3 = document.createElement("img");
     imgRef3.setAttribute("src", "../image/humidity.png");
     imgRef3.classList.add("conditionIcon");
@@ -216,7 +210,7 @@ function showData(data3){
     h4Ref2.innerHTML = data3.main.humidity + "%";
     let h6Ref2 = document.createElement("h6");
     h6Ref2.innerHTML = "Humidity";
-    h4Ref2.classList.add("px -3");
+    h4Ref2.classList.add("px-3");
     textDiv2.appendChild(h4Ref2);
     textDiv2.appendChild(h6Ref2);
     divRef2.appendChild(textDiv2);
@@ -231,39 +225,84 @@ function showData(data3){
 function showHeat(data, data2, data3){
     let divRef = document.querySelector("#show-weather");
     let imgRef = document.createElement("img");
-    if(data3.weather[0].main == "Clouds"){
-        imgRef.setAttribute("src", "../image/clouds.png");
-    }
-    else if(data3.weather[0].main == "Clear"){
-        imgRef.setAttribute("src", "../image/clear.png")
-    }
-    else if(data3.weather[0].main == "Rain"){
-        imgRef.setAttribute("src", "../image/rain.png")
-    }
-    else if(data3.weather[0].main == "Drizzle"){
-        imgRef.setAttribute("src", "../image/drizzle.png")
-    }
-    else if(data3.weather[0].main == "Mist" || data3.weather[0].main == "Haze"){
-        imgRef.setAttribute("src", "../image/mist.png")
-    }
+    imgRef.innerHTML = "";
+    imgRef.classList.add("mb-5");
 
-    let weatherRef = document.createElement("h3");
-    weatherRef.classList.add("d-flex", "justify-content-center");
-    weatherRef.innerHTML = data2.formatted.substring(11,16) + " " + data.hourly.temperature_2m[data2.formatted.substring(11,13)] + " " + data.hourly_units.temperature_2m; //Orsakar en vertikal scrollbar
+    if(data3.weather[0].icon == "01n"){
+        imgRef.setAttribute("src", "../image/01n_t@4x.png");
+    }
+    else if(data3.weather[0].icon == "01d"){
+        imgRef.setAttribute("src", "../image/01d_t@4x.png")
+    }
+    else if(data3.weather[0].icon == "02d"){
+        imgRef.setAttribute("src", "../image/02d_t@4x.png")
+    }
+    else if(data3.weather[0].icon == "02n"){
+        imgRef.setAttribute("src", "../image/02n_t@4x.png")
+    }
+    else if(data3.weather[0].icon == "03d"){
+        imgRef.setAttribute("src", "../image/03d_t@4x.png")
+    }
+    else if(data3.weather[0].icon == "03n"){
+        imgRef.setAttribute("src", "../image/03n_t@4x.png");
+    }
+    else if(data3.weather[0].icon == "04d"){
+        imgRef.setAttribute("src", "../image/04d_t@4x.png")
+    }
+    else if(data3.weather[0].icon == "04n"){
+        imgRef.setAttribute("src", "../image/04n_t@4x.png")
+    }
+    else if(data3.weather[0].icon == "09d"){
+        imgRef.setAttribute("src", "../image/09d_t@4x.png")
+    }
+    else if(data3.weather[0].icon == "09n"){
+        imgRef.setAttribute("src", "../image/09n_t@4x.png")
+    }
+    else if(data3.weather[0].icon == "10d"){
+        imgRef.setAttribute("src", "../image/10d_t@4x.png")
+    }
+    else if(data3.weather[0].icon == "10n"){
+        imgRef.setAttribute("src", "../image/10n_t@4x.png")
+    }
+    else if(data3.weather[0].icon == "13d"){
+        imgRef.setAttribute("src", "../image/13d_t@4x.png")
+    }
+    else if(data3.weather[0].icon == "13n"){
+        imgRef.setAttribute("src", "../image/13n_t@4x.png")
+    }
+    else if(data3.weather[0].icon == "50d"){
+        imgRef.setAttribute("src", "../image/50d_t@4x.png")
+    }
+    else if(data3.weather[0].icon == "13n"){
+        imgRef.setAttribute("src", "../image/50n_t@4x.png")
+    }
             
     divRef.appendChild(imgRef);
-    divRef.appendChild(weatherRef);
     let hourRef = document.querySelector("#show-next-hour");
-    for(let i = parseInt(data2.formatted.substring(11,13)) + 1; i < parseInt(data2.formatted.substring(11,13))  + 5; i++ ){
+    let tempRef = document.querySelector("#hour-temp");
+    hourRef.innerHTML = "";
+    tempRef.innerHTML = "";
+    for(let i = parseInt(data2.formatted.substring(11,13)); i < parseInt(data2.formatted.substring(11,13))  + 5; i++ ){
         let time = i;
         if(time >= 24){
             time = time -24;
         }
         
         let h3Ref = document.createElement("h3");
-        let textNodeRef2 = document.createTextNode(time + ":00 " + data.hourly.temperature_2m[i] + " " + data.hourly_units.temperature_2m);
-        h3Ref.appendChild(textNodeRef2);
+        let h3Ref2 = document.createElement("h3");
+
+        if(time < 10){
+            h3Ref.innerHTML = "0" + time + ":00 ";
+            h3Ref2.innerHTML = data.hourly.temperature_2m[i] + data.hourly_units.temperature_2m;
+
+        }
+        else{
+            h3Ref.innerHTML = time + ":00 ";
+            h3Ref2.innerHTML = data.hourly.temperature_2m[i] + data.hourly_units.temperature_2m;
+
+        }
         hourRef.appendChild(h3Ref);
+        tempRef.appendChild(h3Ref2);
     }
 }
 
