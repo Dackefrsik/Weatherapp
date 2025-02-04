@@ -54,8 +54,11 @@ window.addEventListener("load", () => {
         event.preventDefault();
 
         let query = document.querySelector("input[type='search']").value;
+        
         let navbarToggler = document.querySelector(".show");
-        navbarToggler.classList.remove("show");
+        if(navbarToggler != null){
+            navbarToggler.classList.remove("show");
+        }
         fetch("https://nominatim.openstreetmap.org/search?format=json&limit=3&q="  + query)
         .catch((error) => {
             console.log(error);
@@ -115,31 +118,41 @@ function weather(lat, lon){
     })
     .then((data) => {
         console.log(data);
-         fetch("http://api.timezonedb.com/v2.1/get-time-zone?key=W2KV6C9E7TW4&format=json&by=position&lat=" + lat + "&lng="  + lon)
-        .catch((error) => {
-            console.log(error);
-        })
-        .then((response) => {
-            return response.json();
-        })
-        .then((data2) =>{
-           console.log(data2);
+        //Hämtar nyckeln från secrets i repository
 
-           //let divRef = document.querySelector("#show-weather");
+        fetch('http://localhost:3000/api-key')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            const apiKey = data.apiKey;
+            console.log("nyckelt", apiKey);
 
-            fetch("https://api.openweathermap.org/data/2.5/weather?lat="+ lat +"&lon=" + lon + "&appid=5b4794c0213f8621d31acea89a4f7cdf")
+            fetch("http://api.timezonedb.com/v2.1/get-time-zone?key="+ apiKey + "&format=json&by=position&lat=" + lat + "&lng="  + lon)
             .catch((error) => {
                 console.log(error);
             })
             .then((response) => {
                 return response.json();
             })
-            .then((data3) => {
-                console.log(data3);
-                showData(data3);
-                showHeat(data, data2, data3);
-            })
-        }); 
+            .then((data2) =>{
+            console.log(data2);
+
+            //let divRef = document.querySelector("#show-weather");
+
+                fetch("https://api.openweathermap.org/data/2.5/weather?lat="+ lat +"&lon=" + lon + "&appid=5b4794c0213f8621d31acea89a4f7cdf")
+                .catch((error) => {
+                    console.log(error);
+                })
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data3) => {
+                    console.log(data3);
+                    showData(data3);
+                    showHeat(data, data2, data3);
+                })
+            });
+        })
     }) 
 } 
 //#endregion
