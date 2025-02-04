@@ -17,9 +17,9 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./ # Se till att arbetskatalogen är roten av projektet
+        working-directory: ./Weatherapp # Se till att arbetskatalogen är roten av projektet
 
 
       - name: Run tests
         run: npm test
-        working-directory: ./ # Se till att arbetskatalogen är roten av projektet
+        working-directory: ./Weatherapp # Se till att arbetskatalogen är roten av projektet
