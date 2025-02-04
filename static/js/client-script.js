@@ -123,9 +123,7 @@ function weather(lat, lon){
         fetch('http://localhost:3000/api-key')
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             const apiKey = data.apiKey;
-            console.log("nyckelt", apiKey);
 
             fetch("http://api.timezonedb.com/v2.1/get-time-zone?key="+ apiKey + "&format=json&by=position&lat=" + lat + "&lng="  + lon)
             .catch((error) => {

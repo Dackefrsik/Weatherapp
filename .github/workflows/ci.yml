@@ -23,4 +23,4 @@ jobs:
         run: npm test
         working-directory: ./Weatherapp
         env:
-          API_KEY: ${{ secrets.YOUR_SECRET_NAME }}
+          API_KEY: ${{ secrets.API_KEY}}
