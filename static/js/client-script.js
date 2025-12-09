@@ -59,7 +59,7 @@ window.addEventListener("load", () => {
         if(navbarToggler != null){
             navbarToggler.classList.remove("show");
         }
-        fetch("https://nominatim.openstreetmap.org/search?format=json&limit=3&q="  + query)
+        fetch("/api/geocode?q=" + encodeURIComponent(query))
         .catch((error) => {
             console.log(error);
         })
@@ -122,8 +122,8 @@ function weather(lat, lon){
 
         fetch('http://localhost:3000/api-key')
         .then(response => response.json())
-        .then(data => {
-            const apiKey = data.apiKey;
+        .then(apikey => {
+            const apiKey = apikey.apiKey;
 
             fetch("http://api.timezonedb.com/v2.1/get-time-zone?key="+ apiKey + "&format=json&by=position&lat=" + lat + "&lng="  + lon)
             .catch((error) => {
